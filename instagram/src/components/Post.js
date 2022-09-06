@@ -27,6 +27,7 @@ function Post(props) {
     <div className="post">
         <div className="post_header">
             <Avatar alt="" src=""/>
+            <small>{props.post.timestamp}</small>
         
         <div className="post_headerInfo">
             <h3>{props.post.user.username}</h3>

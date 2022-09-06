@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import { Button, stepClasses } from "@mui/material";
 
-// props -> token & tokenType
-
 const ImageUpload = (props) => {
   const BASE_URL = "http://localhost:8000/";
 
@@ -32,17 +30,48 @@ const ImageUpload = (props) => {
     try {
       const res = await fetch(BASE_URL + "post/image", reqOptions);
       if (res.ok) {
-        const data = await res.json();
-
-        // create post here
+          const data = await res.json();
+          console.log(data);
+        cretePost(data.filename);
       }
     } catch (error) {
       console.log(error);
       alert(error);
     } finally {
       setImg(null);
-      setDescription('');
-      document.getElementById('fileInput').value = null;
+      setDescription("");
+      document.getElementById("fileInput").value = null;
+    }
+  }
+
+  async function cretePost(imgUrl) {
+    const sendData = JSON.stringify({
+      img_url: imgUrl,
+      img_url_type: "relative",
+      caption: description,
+      creator_id: props.userId,
+    });
+    const reqOptions = {
+      method: "post",
+      headers: new Headers({
+        Authorization: props.token_type + " " + props.token,
+        "Content-Type": "application/json",
+      }),
+      body: sendData,
+    };
+
+    try {
+      const res = await fetch(BASE_URL + "post", reqOptions);
+      if (res.ok) {
+        const data = await res.json();
+        console.log(data);
+        window.location.reload(); // reload the page
+        window.scrollTo(0,0); // scroll to start of the page
+        
+      }
+    } catch (error) {
+      console.log(error);
+      alert(error);
     }
   }
 

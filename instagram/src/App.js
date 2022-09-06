@@ -145,7 +145,7 @@ function App() {
       const response = await fetch(BASE_URL + "post/all");
       if (response.ok) {
         const posts = await response.json();
-        Array.from(posts).sort((a, b) => {
+        posts.sort((a, b) => {
           const a_timeStamp = a.timestamp.split(/[-T]/);
           const b_timeStamp = b.timestamp.split(/[-T]/);
           const a_date = new Date(
@@ -154,7 +154,9 @@ function App() {
           const b_date = new Date(
             Date.UTC(b_timeStamp[0], b_timeStamp[1] - 1, b_timeStamp[2])
           );
-          return b_date - a_date;
+          const diffRes = ( a_date - b_date);
+          
+          return diffRes
         });
         setPosts(posts);
         return posts;
@@ -264,7 +266,7 @@ function App() {
         ))}
       </div>
       {authToken ? (
-        <ImageUpload token={authToken} token_type = {authTokenType}/>
+        <ImageUpload token={authToken} token_type = {authTokenType} userId = {userId}/>
       ) : (
         <h3>You need to login to upload</h3>
       )}
