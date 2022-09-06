@@ -60,3 +60,8 @@
     background-color: transparent;
     color: lightblue;
   }
+  .post_button:enabled {
+    color: rgb(94, 146, 163);
+
+
+  }

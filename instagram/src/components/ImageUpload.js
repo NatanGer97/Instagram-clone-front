@@ -22,7 +22,7 @@ const ImageUpload = (props) => {
     const reqOptions = {
       method: "post",
       headers: new Headers({
-        Authorization: props.token_type + " " + props.token,
+        'Authorization': props.token_type + " " + props.token,
       }),
       body: sendData,
     };

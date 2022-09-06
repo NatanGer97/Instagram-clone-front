@@ -145,7 +145,13 @@ function App() {
       const response = await fetch(BASE_URL + "post/all");
       if (response.ok) {
         const posts = await response.json();
-        posts.sort((a, b) => {
+        const sortedPosts = posts.sort((a, b) => {
+          const t_a = a.timestamp.split(/[-T:]/);
+          const t_b = b.timestamp.split(/[-T:]/);
+          const d_a = new Date(Date.UTC(t_a[0], t_a[1]-1, t_a[2], t_a[3], t_a[4], t_a[5]));
+          const d_b = new Date(Date.UTC(t_b[0], t_b[1]-1, t_b[2], t_b[3], t_b[4], t_b[5]));
+          return d_b - d_a;
+       /*  posts.sort((a, b) => {
           const a_timeStamp = a.timestamp.split(/[-T]/);
           const b_timeStamp = b.timestamp.split(/[-T]/);
           const a_date = new Date(
@@ -156,9 +162,9 @@ function App() {
           );
           const diffRes = a_date - b_date;
 
-          return diffRes;
+          return diffRes; */
         });
-        setPosts(posts);
+        setPosts(sortedPosts);
         return posts;
       } else {
         throw response;
@@ -266,6 +272,7 @@ function App() {
             post={post}
             token={authToken}
             token_type={authTokenType}
+            username = {username}
           />
         ))}
       </div>
