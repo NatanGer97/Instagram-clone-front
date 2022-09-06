@@ -38,12 +38,11 @@ function App() {
   const [userId, setUserId] = useState("");
 
   useEffect(() => {
-    console.log(localStorage.getItem('test'));
-    setAuthToken(window.localStorage.getItem('authToken'));
-    setAuthTokenType(window.localStorage.getItem('authTokenType'))
-    setUsername(window.localStorage.getItem('username'))
-    setUserId(window.localStorage.getItem('userId'))
-    
+    console.log(localStorage.getItem("test"));
+    setAuthToken(window.localStorage.getItem("authToken"));
+    setAuthTokenType(window.localStorage.getItem("authTokenType"));
+    setUsername(window.localStorage.getItem("username"));
+    setUserId(window.localStorage.getItem("userId"));
   }, []);
 
   //  useEffect(() => {
@@ -63,8 +62,9 @@ function App() {
   // }, [authToken, authTokenType, userId]);
 
   function signIn(event) {
-    event.preventDefault();
-    localStorage.setItem('test','test');
+    if (event != null)
+      event.preventDefault();
+    localStorage.setItem("test", "test");
 
     let formData = new FormData();
     formData.append("username", username);
@@ -84,11 +84,11 @@ function App() {
         setAuthToken(data.access_token);
         localStorage.setItem("authToken", data.access_token);
         setAuthTokenType(data.token_type);
-        localStorage.setItem("authTokenType", data.token_type)
+        localStorage.setItem("authTokenType", data.token_type);
         setUserId(data.user_id);
-        localStorage.setItem("userId", data.user_id)
+        localStorage.setItem("userId", data.user_id);
         setUsername(data.username);
-        localStorage.setItem("username", data.username)
+        localStorage.setItem("username", data.username);
       })
       .catch((err) => {
         console.log(err);
@@ -97,16 +97,47 @@ function App() {
     setOpenSignIn(false);
   }
 
-  function signUp(event)
-  {
+  async function signUp(event) {
+    if (event != null)
+      event.preventDefault();
+
+    const sendData = JSON.stringify({
+      username: username,
+      email: email,
+      password: password,
+    });
     
+    const reqOptions = {
+      method: "post",
+      headers: {'Content-Type': 'application/json'},
+      body: sendData,
+    };
+
+    const urlForFetching = BASE_URL + "user/";
+
+    try{
+      const res = await fetch(urlForFetching, reqOptions);
+      if (res.ok)
+      {
+        const data = await res.json();
+        console.log(data);
+        signIn();
+      }
+    }
+    catch(err)
+    {
+      console.log(err);
+      alert(err);
+    }
+
+    setOpenSignUp(false);
   }
   function logout() {
     setAuthToken(null);
     setAuthTokenType(null);
-    setUserId('');
-    setUsername('');
-    localStorage.removeItem('test');
+    setUserId("");
+    setUsername("");
+    localStorage.removeItem("test");
     localStorage.removeItem("authToken");
     localStorage.removeItem("authTokenType");
     localStorage.removeItem("username");
@@ -197,7 +228,7 @@ function App() {
               value={username}
               onChange={(e) => setUsername(e.target.value)}
             />
-              <Input
+            <Input
               placeholder="email"
               type="email"
               value={email}
