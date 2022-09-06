@@ -154,9 +154,9 @@ function App() {
           const b_date = new Date(
             Date.UTC(b_timeStamp[0], b_timeStamp[1] - 1, b_timeStamp[2])
           );
-          const diffRes = ( a_date - b_date);
-          
-          return diffRes
+          const diffRes = a_date - b_date;
+
+          return diffRes;
         });
         setPosts(posts);
         return posts;
@@ -262,11 +262,19 @@ function App() {
       </div>
       <div className="app_posts">
         {posts.map((post) => (
-          <Post post={post} />
+          <Post
+            post={post}
+            token={authToken}
+            token_type={authTokenType}
+          />
         ))}
       </div>
       {authToken ? (
-        <ImageUpload token={authToken} token_type = {authTokenType} userId = {userId}/>
+        <ImageUpload
+          token={authToken}
+          token_type={authTokenType}
+          userId={userId}
+        />
       ) : (
         <h3>You need to login to upload</h3>
       )}
