@@ -71,6 +71,7 @@ function Post(props) {
       const response = await fetch(BASE_URL + "comment", reqOptions);
       if (response.ok) {
         alert("Commend added");
+        fetchComments();
       }
     } catch (error) {
       alert(error);
@@ -83,6 +84,23 @@ function Post(props) {
   function onNewCommentChangeHandler(event) {
     setNewComment(event.target.value);
   }
+
+  async function fetchComments()
+  {
+      try {
+        const response = await fetch(BASE_URL + 'comment/all/' + props.post.id);
+      if (response.ok)
+      {
+        const data = await response.json();
+        setComments(data);
+      }
+      } catch (error) {
+        alert(error);
+        console.log(error);
+      }
+  }
+
+
   return (
     <div className="post">
       <div className="post_header">
