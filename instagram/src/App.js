@@ -2,6 +2,7 @@ import { Button, Input, Modal } from "@mui/material";
 import { Box } from "@mui/system";
 import React, { Fragment, useEffect, useState } from "react";
 import "./App.css";
+import ImageUpload from "./components/ImageUpload";
 import Post from "./components/Post";
 function getModalStyle(param) {
   const top = 50;
@@ -62,8 +63,7 @@ function App() {
   // }, [authToken, authTokenType, userId]);
 
   function signIn(event) {
-    if (event != null)
-      event.preventDefault();
+    if (event != null) event.preventDefault();
     localStorage.setItem("test", "test");
 
     let formData = new FormData();
@@ -98,34 +98,30 @@ function App() {
   }
 
   async function signUp(event) {
-    if (event != null)
-      event.preventDefault();
+    if (event != null) event.preventDefault();
 
     const sendData = JSON.stringify({
       username: username,
       email: email,
       password: password,
     });
-    
+
     const reqOptions = {
       method: "post",
-      headers: {'Content-Type': 'application/json'},
+      headers: { "Content-Type": "application/json" },
       body: sendData,
     };
 
     const urlForFetching = BASE_URL + "user/";
 
-    try{
+    try {
       const res = await fetch(urlForFetching, reqOptions);
-      if (res.ok)
-      {
+      if (res.ok) {
         const data = await res.json();
         console.log(data);
         signIn();
       }
-    }
-    catch(err)
-    {
+    } catch (err) {
       console.log(err);
       alert(err);
     }
@@ -267,6 +263,11 @@ function App() {
           <Post post={post} />
         ))}
       </div>
+      {authToken ? (
+        <ImageUpload token={authToken} token_type = {authTokenType}/>
+      ) : (
+        <h3>You need to login to upload</h3>
+      )}
     </div>
   );
 }
